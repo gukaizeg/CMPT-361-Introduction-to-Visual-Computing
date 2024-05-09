@@ -1,0 +1,19 @@
+For the part e3, I set it up so that ghosts can eat beans and reduce the score we get by 100 (for each bean eaten), assuming the score <= 0 then the game is over.
+
+For the part e2, I generate a random yellow square(special item) in the game, when Pac-Man eats a yellow square, the top right corner lives will be +1 and no points will be deducted when it touches the ghost, but the number will be reduced by 1.
+
+In addition I deliberately let the ghosts stay for a while at the beginning of the game to prevent them from ending the game directly (two ghosts move at the same time at the beginning of the score -200.)
+
+For the algorithm of ghosts:
+
+1.Loop over ghostPositions: For each ghost, the function generates a random direction (0 = up, 1 = down, 2 = left, 3 = right).
+
+2.Updating position based on the random direction: If the direction is 0, it means the ghost is supposed to move up, so the y-coordinate of its position is incremented by y_spacing. This logic is mirrored for the other three directions, but with appropriate adjustments for each direction (decrementing y-coordinate for down, decrementing x-coordinate for left, incrementing x-coordinate for right).
+
+3.Updating bound box for each direction: For each direction, the bounding box of the ghost is updated to match the new position of the ghost.
+
+4.Collision detection: After each ghost's position update, there is a secondary loop that checks if the updated position results in a collision with any object from ghostCollidars array. If a collision is detected, the ghost is moved back to its original position.
+
+5.Boundary checks: After the collision checks, the function checks if the ghost's new position is within the bounds set by ghostTopLimits, ghostBottomLimits, ghostLeftLimit, and ghostRightLimit. If the ghost is out of bounds, it's set back to the limit value.
+
+

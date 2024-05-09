@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #gl-canvas {
+            position: relative;
+            z-index: 1;
+        }
+
+        #hud {
+            position: absolute;
+            top: 10px;
+            width: 800px;
+            z-index: 2;
+            color: white;
+            
+        }
+
+        #timer {
+            position: absolute;
+            top: -1px;
+            left: 100px;
+            color: white;
+            font-size: 35px;
+        }
+
+        #score {
+            position: absolute;
+            top: -1px;
+            right: 100px;
+            color: white;
+            font-size: 35px;
+        }
+
+        #message {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            color: rgb(255, 0, 0);
+            font-size: 25px;
+        }
+
+        #lives {
+            position: absolute;
+            top: 45px;
+            right: 10px;
+            color: white;
+            font-size: 25px;
+        }
+    </style>
+
+<script id = "vertex-shader" type="x-shader/x-vertex">
+
+attribute vec4 vPosition;
+attribute vec4 vColor;
+varying vec4 fColor;
+uniform vec4 offset;
+
+void main()
+{
+    gl_Position = vPosition + offset;
+    fColor =vColor;
+    gl_PointSize = 10.0;
+}
+</script>
+
+<script id = "fragment-shader" type ="x-shader/x-fragment">
+precision mediump float;
+
+varying vec4 fColor;
+uniform vec4 color;
+uniform float dashSize; 
+uniform float gapSize; 
+uniform float useDashedLine;  
+uniform float useCircularPoint;
+
+void main()
+{
+    if (useDashedLine > 0.5) {  
+        float totalSize = dashSize + gapSize;
+        float modValue = mod(gl_FragCoord.x + gl_FragCoord.y, totalSize);
+
+        if (modValue > dashSize) {
+            discard;  
+        } 
+    }
+    
+    if (useCircularPoint > 0.5) {  // Simulate boolean true
+        float r = 0.0;
+        vec2 cxy = 2.0 * gl_PointCoord - 1.0;
+        r = dot(cxy, cxy);
+    
+        if (r > 1.0) {
+            discard;
+        }
+    }
+
+    gl_FragColor = fColor;
+}
+
+</script>
+
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="initShaders.js"></script>
+<script type="text/javascript" src="MV.js"></script>
+<script type="text/javascript" src="a1.js"></script>
+</head>
+
+<body>
+    <div id="game-window">
+        <canvas id="gl-canvas" width="800" height="850">
+            Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+        <div id="hud">
+            <span id="timer">Time:60</span>
+            <span id="score">Score:0</span>
+            <span id="message">Press S to start game</span>
+            <span id="lives">Lives:0</span>
+        </div>
+    </div>
+</body>
+</html>
+    
